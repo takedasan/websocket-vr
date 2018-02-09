@@ -5,6 +5,16 @@
     <meta charset="UTF-8" />
     <title>チャット</title>
     <link rel="stylesheet" href="/webjars/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <link rel='stylesheet' href='/webjars/jquery-ui/1.12.1/jquery-ui.css' />
+    <style>
+        .box {
+            background-color: #fff;
+            border: 1px solid #aaa;
+            width: 64px;
+            height: 64px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,6 +36,9 @@
                     <button id="sendButton" type="button" class="btn btn-default">送信</button>
                 </div>
             </div>
+            <div id="dragArea">
+                <div id="draggable" class="box">ほげ</div>
+            </div>
             <div class="row">
                 <div class="col-sm-4 col-sm-offset-2">
                     <ul id="messageList" class="list-unstyled">
@@ -36,10 +49,73 @@
     </div>
     <script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src='/webjars/jquery-ui/1.12.1/jquery-ui.min.js'></script>
+    <script src='/webjars/jquery-ui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js'></script>
     <script>
+        Object.defineProperty(Object.prototype, "forIn", {
+            value: function (fn, self) {
+                self = self || this;
+
+                Object.keys(this).forEach(function (key, index) {
+                    var value = this[key];
+
+                    fn.call(self, key, value, index);
+                }, this);
+            }
+        });
+
         $(function () {
             var endpoint = 'ws://' + location.host + '/ws';
-            var webSocket = null;
+            var webSocket = new WebSocket(endpoint);
+
+            // ひらがな
+            var kanaData =
+                [
+                    { 'id': '001', 'kana': 'あ' },
+                    { 'id': '002', 'kana': 'い' },
+                    { 'id': '003', 'kana': 'う' }
+                ];
+
+            // 接続時
+            webSocket.onopen = function () {
+                // 現在の配置を取得する
+            };
+
+            // 受信時
+            webSocket.onmessage = function (message) {
+                var moveData = JSON.parse(message.data);
+                $('#' + moveData['id']).css('top', moveData['top']);
+                $('#' + moveData['id']).css('left', moveData['left']);
+            };
+
+            // 切断時
+            webSocket.onclose = function () {
+            };
+
+            // 例外時
+            webSocket.onerror = function () {
+                alert('エラーが発生しました。');
+            };
+
+            kanaData.forIn(function (key, value, index) {
+                $('#draggable').clone(true).attr('id', value['id']).text(value['kana']).insertAfter('#draggable');
+
+                $('#' + value['id']).draggable({
+                    // ドロップ時、座標を送信
+                    stop: function (event, ui) {
+                        var dragObject = {};
+                        dragObject.id = $(this).attr('id');
+                        dragObject.kana = $(this).text();
+                        dragObject.top = ui.position.top;
+                        dragObject.left = ui.position.left;
+
+                        var jsonMessage = window.JSON.stringify(dragObject);
+                        webSocket.send(jsonMessage);
+                    }
+                });
+            });
+
+            $('#draggable').draggable();
 
             $('#connectButton').click(function () {
 
