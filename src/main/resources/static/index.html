@@ -7,43 +7,30 @@
     <link rel="stylesheet" href="/webjars/bootstrap/4.0.0/css/bootstrap.min.css" />
     <link rel='stylesheet' href='/webjars/jquery-ui/1.12.1/jquery-ui.css' />
     <style>
+        @import url(https://fonts.googleapis.com/earlyaccess/roundedmplus1c.css);
+        .body {
+            font-family: 'Rounded Mplus 1c';
+        }
+
         .box {
-            background-color: #fff;
-            border: 1px solid #aaa;
-            width: 64px;
-            height: 64px;
+            position: absolute;
+            padding: 0rem;
+            margin: 0rem;
+            width: 4rem;
+            height: 4rem;
             cursor: pointer;
+            font-weight: 900;
+            font-size: 4rem;
+            text-shadow: 2px 2px 1px #999999;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h2>チャット</h2>
         <div class="form-horizontal">
-            <div class="form-group">
-                <div class="col-sm-3">
-                    <button id="connectButton" type="button" class="btn btn-default">接続</button>
-                    <button id="disconnectButton" class="btn btn-default">切断</button>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="message" class="col-sm-2 control-label">メッセージ</label>
-                <div class="col-sm-4">
-                    <input id="message" type="text" class="form-control" value='{ "x": 1, "y": 0, "z": 0 }' />
-                </div>
-                <div class="col-sm-2">
-                    <button id="sendButton" type="button" class="btn btn-default">送信</button>
-                </div>
-            </div>
             <div id="dragArea">
-                <div id="draggable" class="box">ほげ</div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4 col-sm-offset-2">
-                    <ul id="messageList" class="list-unstyled">
-                    </ul>
-                </div>
+                <p id="draggable" class="box"></p>
             </div>
         </div>
     </div>
@@ -71,21 +58,93 @@
             // ひらがな
             var kanaData =
                 [
-                    { 'id': '001', 'kana': 'あ' },
-                    { 'id': '002', 'kana': 'い' },
-                    { 'id': '003', 'kana': 'う' }
+                    { 'id': '001', 'kana': 'あ', 'color': '#ea5550' },
+                    { 'id': '002', 'kana': 'い', 'color': '#e9bc00' },
+                    { 'id': '003', 'kana': 'う', 'color': '#00ac9a' },
+                    { 'id': '004', 'kana': 'え', 'color': '#4d4398' },
+                    { 'id': '005', 'kana': 'お', 'color': '#e3acae' },
+                    { 'id': '006', 'kana': 'か', 'color': '#ea5550' },
+                    { 'id': '007', 'kana': 'き', 'color': '#e9bc00' },
+                    { 'id': '008', 'kana': 'く', 'color': '#00ac9a' },
+                    { 'id': '009', 'kana': 'け', 'color': '#4d4398' },
+                    { 'id': '010', 'kana': 'こ', 'color': '#e3acae' },
+                    { 'id': '011', 'kana': 'さ', 'color': '#ea5550' },
+                    { 'id': '012', 'kana': 'し', 'color': '#e9bc00' },
+                    { 'id': '013', 'kana': 'す', 'color': '#00ac9a' },
+                    { 'id': '014', 'kana': 'せ', 'color': '#4d4398' },
+                    { 'id': '015', 'kana': 'そ', 'color': '#e3acae' },
+                    { 'id': '016', 'kana': 'た', 'color': '#ea5550' },
+                    { 'id': '017', 'kana': 'ち', 'color': '#e9bc00' },
+                    { 'id': '018', 'kana': 'つ', 'color': '#00ac9a' },
+                    { 'id': '019', 'kana': 'て', 'color': '#4d4398' },
+                    { 'id': '020', 'kana': 'と', 'color': '#e3acae' },
+                    { 'id': '021', 'kana': 'な', 'color': '#ea5550' },
+                    { 'id': '022', 'kana': 'に', 'color': '#e9bc00' },
+                    { 'id': '023', 'kana': 'ぬ', 'color': '#00ac9a' },
+                    { 'id': '024', 'kana': 'ね', 'color': '#4d4398' },
+                    { 'id': '025', 'kana': 'の', 'color': '#e3acae' },
+                    { 'id': '026', 'kana': 'は', 'color': '#ea5550' },
+                    { 'id': '027', 'kana': 'ひ', 'color': '#e9bc00' },
+                    { 'id': '028', 'kana': 'ふ', 'color': '#00ac9a' },
+                    { 'id': '029', 'kana': 'へ', 'color': '#4d4398' },
+                    { 'id': '030', 'kana': 'ほ', 'color': '#e3acae' },
+                    { 'id': '031', 'kana': 'ま', 'color': '#ea5550' },
+                    { 'id': '032', 'kana': 'み', 'color': '#e9bc00' },
+                    { 'id': '033', 'kana': 'む', 'color': '#00ac9a' },
+                    { 'id': '034', 'kana': 'め', 'color': '#4d4398' },
+                    { 'id': '035', 'kana': 'も', 'color': '#e3acae' },
+                    { 'id': '036', 'kana': 'や', 'color': '#ea5550' },
+                    { 'id': '037', 'kana': 'ゆ', 'color': '#e9bc00' },
+                    { 'id': '038', 'kana': 'よ', 'color': '#00ac9a' },
+                    { 'id': '039', 'kana': 'ら', 'color': '#ea5550' },
+                    { 'id': '040', 'kana': 'り', 'color': '#e9bc00' },
+                    { 'id': '041', 'kana': 'る', 'color': '#00ac9a' },
+                    { 'id': '042', 'kana': 'れ', 'color': '#4d4398' },
+                    { 'id': '043', 'kana': 'ろ', 'color': '#e3acae' },
+                    { 'id': '044', 'kana': 'わ', 'color': '#ea5550' },
+                    { 'id': '045', 'kana': 'を', 'color': '#e9bc00' },
+                    { 'id': '046', 'kana': 'ん', 'color': '#00ac9a' },
+                    { 'id': '047', 'kana': 'が', 'color': '#ea5550' },
+                    { 'id': '048', 'kana': 'ぎ', 'color': '#e9bc00' },
+                    { 'id': '049', 'kana': 'ぐ', 'color': '#00ac9a' },
+                    { 'id': '050', 'kana': 'げ', 'color': '#4d4398' },
+                    { 'id': '051', 'kana': 'ご', 'color': '#e3acae' },
+                    { 'id': '052', 'kana': 'ざ', 'color': '#ea5550' },
+                    { 'id': '053', 'kana': 'じ', 'color': '#e9bc00' },
+                    { 'id': '054', 'kana': 'ず', 'color': '#00ac9a' },
+                    { 'id': '055', 'kana': 'ぜ', 'color': '#4d4398' },
+                    { 'id': '056', 'kana': 'ぞ', 'color': '#e3acae' },
+                    { 'id': '057', 'kana': 'だ', 'color': '#ea5550' },
+                    { 'id': '058', 'kana': 'ぢ', 'color': '#e9bc00' },
+                    { 'id': '059', 'kana': 'づ', 'color': '#00ac9a' },
+                    { 'id': '060', 'kana': 'で', 'color': '#4d4398' },
+                    { 'id': '061', 'kana': 'ど', 'color': '#e3acae' },
+                    { 'id': '062', 'kana': 'ば', 'color': '#ea5550' },
+                    { 'id': '063', 'kana': 'び', 'color': '#e9bc00' },
+                    { 'id': '064', 'kana': 'ぶ', 'color': '#00ac9a' },
+                    { 'id': '065', 'kana': 'べ', 'color': '#4d4398' },
+                    { 'id': '066', 'kana': 'ぼ', 'color': '#e3acae' },
+                    { 'id': '067', 'kana': 'ぱ', 'color': '#ea5550' },
+                    { 'id': '068', 'kana': 'ぴ', 'color': '#e9bc00' },
+                    { 'id': '069', 'kana': 'ぷ', 'color': '#00ac9a' },
+                    { 'id': '070', 'kana': 'ぺ', 'color': '#4d4398' },
+                    { 'id': '071', 'kana': 'ぽ', 'color': '#e3acae' },
+                    { 'id': '072', 'kana': 'ゃ', 'color': '#ea5550' },
+                    { 'id': '073', 'kana': 'ゅ', 'color': '#e9bc00' },
+                    { 'id': '074', 'kana': 'ょ', 'color': '#00ac9a' },
+                    { 'id': '075', 'kana': 'っ', 'color': '#4d4398' },
+                    { 'id': '076', 'kana': '！', 'color': '#ea5550' },
+                    { 'id': '077', 'kana': '？', 'color': '#e9bc00' },
                 ];
 
             // 接続時
             webSocket.onopen = function () {
-                // 現在の配置を取得する
             };
 
             // 受信時
             webSocket.onmessage = function (message) {
                 var moveData = JSON.parse(message.data);
-                $('#' + moveData['id']).css('top', moveData['top']);
-                $('#' + moveData['id']).css('left', moveData['left']);
+                $('#' + moveData['id']).animate({ 'top': moveData['top'], 'left': moveData['left'] }, 1000);
             };
 
             // 切断時
@@ -99,6 +158,7 @@
 
             kanaData.forIn(function (key, value, index) {
                 $('#draggable').clone(true).attr('id', value['id']).text(value['kana']).insertAfter('#draggable');
+                $('#' + value['id']).css('color', value['color']);
 
                 $('#' + value['id']).draggable({
                     // ドロップ時、座標を送信
@@ -113,47 +173,6 @@
                         webSocket.send(jsonMessage);
                     }
                 });
-            });
-
-            $('#draggable').draggable();
-
-            $('#connectButton').click(function () {
-
-                $("#messageList").empty();
-
-                webSocket = new WebSocket(endpoint);
-                webSocket.onopen = function () {
-                    $('#roomName').prop('disabled', true);
-                    $('#connectButton').prop('disabled', true);
-                    $('#disconnectButton').prop('disabled', false);
-                };
-                webSocket.onclose = function () {
-                };
-                webSocket.onmessage = function (message) {
-                    $('#messageList').prepend($('<li>').text(message.data));
-                };
-                webSocket.onerror = function () {
-                    alert('エラーが発生しました。');
-                };
-            });
-
-            $('#disconnectButton').click(function () {
-
-                webSocket.close();
-                webSocket = null;
-
-                $('#roomName').prop('disabled', false);
-                $('#connectButton').prop('disabled', false);
-                $('#disconnectButton').prop('disabled', true);
-            });
-
-            $('#sendButton').click(function () {
-                if (!webSocket) {
-                    alert('未接続です。');
-                    return;
-                }
-
-                webSocket.send($('#message').val());
             });
         });
     </script>
